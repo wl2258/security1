@@ -30,14 +30,14 @@ public class IndexController {
     }
 
     // 스프링 시큐리티가 낚아챔 - securityConfig 파일 생성 후 작동 안 함
-    @GetMapping("/login")
-    public @ResponseBody String login() {
-        return "login";
+    @GetMapping("/loginForm")
+    public String login() {
+        return "loginForm";
     }
 
-    @GetMapping("/join")
-    public @ResponseBody  String join() {
-        return "join";
+    @GetMapping("/joinForm")
+    public  String join() {
+        return "joinForm";
     }
 
     @GetMapping("/loginProc")
