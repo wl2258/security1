@@ -1,12 +1,23 @@
 package com.cos.security1.controller;
 
+import com.cos.security1.model.User;
+import com.cos.security1.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller // view를 리턴하겠다
 public class IndexController {
 
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @GetMapping({"", "/"})
     public String index() {
         // 머스테치 기본폴더 src/main/resources
@@ -35,13 +46,30 @@ public class IndexController {
         return "loginForm";
     }
 
+    @PostMapping("/join")
+    public String join(User user) {
+        user.setRole("ROLE_USER");
+        String rawPassword = user.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        user.setPassword(encPassword);
+        userRepository.save(user);
+        return "redirect:/loginForm";
+    }
+
     @GetMapping("/joinForm")
-    public  String join() {
+    public  String joinForm() {
         return "joinForm";
     }
 
     @GetMapping("/loginProc")
     public @ResponseBody String loginProc() {
         return "회원가입 완료됨!!";
+    }
+
+//    @Secured("ROLE_ADMIN") 특정 한개만
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // 함수가 시작되기 전에 동작, 여러 개
+    @GetMapping("/data")
+    public @ResponseBody String data() {
+        return "데이터 정보";
     }
 }
