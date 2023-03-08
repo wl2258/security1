@@ -66,8 +66,8 @@ public class IndexController {
         return "회원가입 완료됨!!";
     }
 
-//    @Secured("ROLE_ADMIN") 특정 한개만
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // 함수가 시작되기 전에 동작, 여러 개
+//    @Secured("ROLE_ADMIN") 특정 한 개의 권한만 설정
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // 함수가 시작되기 전에 동작, 여러 개의 권한 설정 가능
     @GetMapping("/data")
     public @ResponseBody String data() {
         return "데이터 정보";
